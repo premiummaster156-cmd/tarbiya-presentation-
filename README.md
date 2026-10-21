@@ -15,7 +15,9 @@ Bu statik sayt. Alohida framework yoki build bosqichi kerak emas. \`index.html\`
 
 ## So‘rov natijalarini kiritish
 
-“Natijalar va diagramma” sahifasida jami javoblar soni va uchta ko‘rsatkich bo‘yicha haqiqiy javob sonlarini kiriting, so‘ng “Diagrammani yangilash” tugmasini bosing. Diagramma foizni avtomatik hisoblaydi. Saytda oldindan tayyor soxta foizlar yo‘q. So‘rovni o‘tkazmagan bo‘lsangiz, natija o‘ylab topmang: avval anonim so‘rovni o‘tkazing va ma’lumotni keyin kiriting. Hozirgi diagramma kiritilgan qiymatlarni joriy brauzer sessiyasida hisoblaydi; natijalarni saqlab qo‘yish uchun ularni alohida qayd eting.
+“Natijalar va diagramma” sahifasida jami javoblar soni va uchta ko‘rsatkich bo‘yicha haqiqiy javob sonlarini kiriting, so‘ng “Diagrammani yangilash” tugmasini bosing. Diagramma foizni avtomatik hisoblaydi va kiritilgan raqamlarga tayangan ikkita xulosa loyihasini yaratadi. Saytda oldindan tayyor soxta foizlar yo‘q. So‘rovni o‘tkazmagan bo‘lsangiz, natija o‘ylab topmang: avval anonim so‘rovni o‘tkazing va ma’lumotni keyin kiriting. Hozirgi diagramma kiritilgan qiymatlarni joriy brauzer sessiyasida hisoblaydi; natijalarni saqlab qo‘yish uchun ularni alohida qayd eting.
+
+Topshiriqda og‘zaki himoya uchun 3–5 daqiqa ko‘rsatilgan. Sahifalar kengroq yozma izoh beradi; himoyada ularni boshidan oxirigacha o‘qish o‘rniga muammo, dalil, huquqiy bog‘lanish va tanlangan yechimni qisqa bayon qiling.
 
 ## Asosiy manbalar
 
