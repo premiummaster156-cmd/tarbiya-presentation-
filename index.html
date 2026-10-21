@@ -112,6 +112,10 @@ input{max-width:100%;min-width:0}
 .slide{transition:none!important;transform-style:preserve-3d;backface-visibility:hidden;will-change:transform,opacity}
 /* Prevent slight horizontal movement from hijacking scrolling. */
 .deck{touch-action:pan-y}
+
+/* Keep the content still while the whole slide moves; no staggered text flicker. */
+.slide .reveal{opacity:1!important;transform:none!important;transition:none!important}
+.deck{touch-action:pan-y}
 </style>
 </head>
 <body>
@@ -326,12 +330,12 @@ prev.addEventListener('click',()=>show(current-1));next.addEventListener('click'
 document.addEventListener('keydown',e=>{if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();show(current+1)}if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();show(current-1)}if(e.key==='Home')show(0);if(e.key==='End')show(slides.length-1);if(e.key.toLowerCase()==='f')toggleFull();});
 deck.addEventListener('touchstart',e=>{startX=e.changedTouches[0].clientX;startY=e.changedTouches[0].clientY;startOnControl=!!(e.target.closest&&e.target.closest('button,a,.nav'))},{passive:true});
 deck.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-startX,dy=e.changedTouches[0].clientY-startY;const deliberateSwipe=Math.abs(dx)>=145&&Math.abs(dx)>=Math.abs(dy)*2;if(deliberateSwipe&&!startOnControl&&!(e.target.closest&&e.target.closest('button,a,.nav')))show(current+(dx<0?1:-1));startOnControl=false;},{passive:true});
-let wheelLock=false;deck.addEventListener('wheel',e=>{if(Math.abs(e.deltaX)>Math.abs(e.deltaY)&&Math.abs(e.deltaX)>30){e.preventDefault();if(wheelLock)return;wheelLock=true;show(current+(e.deltaX>0?1:-1));setTimeout(()=>wheelLock=false,800);}},{passive:false});
+let wheelLock=false;deck.addEventListener('wheel',e=>{if(Math.abs(e.deltaX)>Math.abs(e.deltaY)*1.5&&Math.abs(e.deltaX)>75){e.preventDefault();if(wheelLock)return;wheelLock=true;show(current+(e.deltaX>0?1:-1));setTimeout(()=>wheelLock=false,800);}},{passive:false});
 function toggleFull(){if(!document.fullscreenElement){document.documentElement.requestFullscreen?.().then(()=>notify('To‘liq ekran yoqildi')).catch(()=>notify('Brauzer to‘liq ekranga ruxsat bermadi'))}else document.exitFullscreen?.();}
 full.addEventListener('click',toggleFull);
 function notify(text){toast.textContent=text;toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),1700)}
 const hash=Number(location.hash.slice(1));if(hash>1&&hash<=slides.length){slides[0].classList.remove('active');current=hash-1;slides[current].classList.add('active');counter.textContent=String(hash).padStart(2,'0')+' / '+String(slides.length).padStart(2,'0');progress.style.width=(hash/slides.length*100)+'%';}
-if(window.matchMedia('(pointer:fine)').matches&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches){let raf=0;document.addEventListener('pointermove',e=>{if(raf)return;raf=requestAnimationFrame(()=>{const active=slides[current],rect=active.getBoundingClientRect(),x=(e.clientX/innerWidth-.5)*2,y=(e.clientY/innerHeight-.5)*2;active.style.setProperty('--mx',x.toFixed(2));active.style.setProperty('--my',y.toFixed(2));const art=active.querySelector('.cover-art');if(art){art.style.transform='perspective(900px) rotateY('+(x*1.7).toFixed(2)+'deg) rotateX('+(-y*1.2).toFixed(2)+'deg)';}raf=0;});},{passive:true});}
+
 })();
 </script>
 </body>
