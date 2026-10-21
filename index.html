@@ -214,6 +214,11 @@ footer{height:62px;padding-inline:clamp(18px,4.5vw,72px);background:rgba(245,242
 }
 
 
+
+/* The cover element carries both classes on the same node. */
+.inner.cover{display:block!important;grid-template-columns:minmax(0,1fr)!important;max-width:1120px!important}
+@media screen and (min-width:1000px) and (min-height:650px){.inner.cover{max-width:1260px!important}}
+
 /* Cleanup from real-device review: remove crowding, overflow and overlay bleed */
 .cover .inner{display:block!important;grid-template-columns:minmax(0,1fr)!important;max-width:1120px!important}
 .cover-copy{max-width:950px!important}
