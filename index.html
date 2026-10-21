@@ -110,6 +110,8 @@ input{max-width:100%;min-width:0}
 /* Animation is driven explicitly by the Web Animations API; prevent class changes
    from competing with the animation or jumping directly to the final transform. */
 .slide{transition:none!important;transform-style:preserve-3d;backface-visibility:hidden;will-change:transform,opacity}
+/* Prevent slight horizontal movement from hijacking scrolling. */
+.deck{touch-action:pan-y}
 </style>
 </head>
 <body>
@@ -242,14 +244,20 @@ input{max-width:100%;min-width:0}
 <script>
 (function(){
 const slides=[...document.querySelectorAll('.slide')],counter=document.getElementById('counter'),progress=document.getElementById('progress'),prev=document.getElementById('prev'),next=document.getElementById('next'),full=document.getElementById('full'),toast=document.getElementById('toast'),deck=document.getElementById('deck');
-let current=0,busy=false,startX=0,startY=0;
+let current=0,busy=false,startX=0,startY=0,startOnControl=false;
 function show(index,force){
   if(busy&&!force)return;
   const target=Math.max(0,Math.min(slides.length-1,index));
   if(target===current)return;
   busy=true;
   const old=current,forward=target>old,oldSlide=slides[old],newSlide=slides[target];
-  const duration=760,exitDuration=520;
+  const isSmall=window.matchMedia('(max-width:650px)').matches;
+  const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const duration=reduced?420:(isSmall?620:680);
+  const exitDuration=reduced?340:(isSmall?440:480);
+  const offset=isSmall?'12%':'14%';
+  const depth=isSmall?'-45px':'-70px';
+  const tilt=isSmall?5:6;
 
   /* Keep both pages rendered during the move. Web Animations starts from
      explicit keyframes rather than relying on a class-change timing race. */
@@ -260,23 +268,23 @@ function show(index,force){
   oldSlide.style.zIndex='4';
 
   const inFrames=forward?[
-    {transform:'translate3d(16%,0,-120px) rotateY(-8deg) scale(.975)',opacity:0,offset:0},
+    {transform:'translate3d('+offset+',0,'+depth+') rotateY(-'+tilt+'deg) scale(.985)',opacity:0,offset:0},
     {transform:'translate3d(0,0,0) rotateY(0deg) scale(1)',opacity:1,offset:1}
   ]:[
-    {transform:'translate3d(-16%,0,-120px) rotateY(8deg) scale(.975)',opacity:0,offset:0},
+    {transform:'translate3d(-'+offset+',0,'+depth+') rotateY('+tilt+'deg) scale(.985)',opacity:0,offset:0},
     {transform:'translate3d(0,0,0) rotateY(0deg) scale(1)',opacity:1,offset:1}
   ];
   const outFrames=forward?[
     {transform:'translate3d(0,0,0) rotateY(0deg) scale(1)',opacity:1,offset:0},
-    {transform:'translate3d(-6%,0,-45px) rotateY(3deg) scale(.99)',opacity:0,offset:1}
+    {transform:'translate3d(-5%,0,-20px) rotateY(2deg) scale(.995)',opacity:0,offset:1}
   ]:[
     {transform:'translate3d(0,0,0) rotateY(0deg) scale(1)',opacity:1,offset:0},
-    {transform:'translate3d(6%,0,-45px) rotateY(-3deg) scale(.99)',opacity:0,offset:1}
+    {transform:'translate3d(5%,0,-20px) rotateY(-2deg) scale(.995)',opacity:0,offset:1}
   ];
 
   let incoming=null,outgoing=null;
   if(typeof newSlide.animate==='function'){
-    incoming=newSlide.animate(inFrames,{duration,easing:'cubic-bezier(.22,.72,.2,1)',fill:'both'});
+    incoming=newSlide.animate(inFrames,{duration,easing:'cubic-bezier(.22,.61,.36,1)',fill:'both'});
     outgoing=oldSlide.animate(outFrames,{duration:exitDuration,easing:'cubic-bezier(.4,0,.7,.2)',fill:'both'});
   }else{
     /* Fallback for browsers without Web Animations support. */
@@ -316,8 +324,8 @@ function show(index,force){
 }
 prev.addEventListener('click',()=>show(current-1));next.addEventListener('click',()=>show(current+1));
 document.addEventListener('keydown',e=>{if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();show(current+1)}if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();show(current-1)}if(e.key==='Home')show(0);if(e.key==='End')show(slides.length-1);if(e.key.toLowerCase()==='f')toggleFull();});
-deck.addEventListener('touchstart',e=>{startX=e.changedTouches[0].clientX;startY=e.changedTouches[0].clientY},{passive:true});
-deck.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-startX,dy=e.changedTouches[0].clientY-startY;const deliberateSwipe=Math.abs(dx)>=110&&Math.abs(dx)>=Math.abs(dy)*1.8;if(deliberateSwipe&&!(e.target.closest&&e.target.closest('button,a')))show(current+(dx<0?1:-1));},{passive:true});
+deck.addEventListener('touchstart',e=>{startX=e.changedTouches[0].clientX;startY=e.changedTouches[0].clientY;startOnControl=!!(e.target.closest&&e.target.closest('button,a,.nav'))},{passive:true});
+deck.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-startX,dy=e.changedTouches[0].clientY-startY;const deliberateSwipe=Math.abs(dx)>=145&&Math.abs(dx)>=Math.abs(dy)*2;if(deliberateSwipe&&!startOnControl&&!(e.target.closest&&e.target.closest('button,a,.nav')))show(current+(dx<0?1:-1));startOnControl=false;},{passive:true});
 let wheelLock=false;deck.addEventListener('wheel',e=>{if(Math.abs(e.deltaX)>Math.abs(e.deltaY)&&Math.abs(e.deltaX)>30){e.preventDefault();if(wheelLock)return;wheelLock=true;show(current+(e.deltaX>0?1:-1));setTimeout(()=>wheelLock=false,800);}},{passive:false});
 function toggleFull(){if(!document.fullscreenElement){document.documentElement.requestFullscreen?.().then(()=>notify('To‘liq ekran yoqildi')).catch(()=>notify('Brauzer to‘liq ekranga ruxsat bermadi'))}else document.exitFullscreen?.();}
 full.addEventListener('click',toggleFull);
