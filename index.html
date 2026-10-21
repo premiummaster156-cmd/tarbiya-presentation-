@@ -116,6 +116,50 @@ input{max-width:100%;min-width:0}
 /* Keep the content still while the whole slide moves; no staggered text flicker. */
 .slide .reveal{opacity:1!important;transform:none!important;transition:none!important}
 .deck{touch-action:pan-y}
+
+/* Editorial redesign: restrained typography, consistent grids, and quiet controls. */
+:root{--paper:#f5f2e9;--paper2:#ebe6da;--ink:#202d27;--green:#275847;--green2:#dce6dc;--orange:#ad4d34;--soft:#626c64;--line:#d2cdbf;--white:#fbfaf5;--serif:Georgia,'Times New Roman',serif;--sans:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;--ease:cubic-bezier(.22,.61,.36,1)}
+body{background-image:linear-gradient(90deg,transparent calc(100% - 1px),rgba(32,45,39,.025) calc(100% - 1px));background-size:8.333% 100%}
+.topbar{height:60px;padding-inline:clamp(20px,4.5vw,72px);font-size:10px;letter-spacing:.09em;background:rgba(245,242,233,.97);backdrop-filter:blur(10px)}
+.identity{gap:10px;letter-spacing:.06em}.seal{width:25px;height:25px;font-size:16px}
+.top-right{gap:14px}.deck{perspective:1800px}
+.slide{padding:clamp(82px,10vh,112px) clamp(22px,7.2vw,110px) 100px;transform-origin:50% 50%;scrollbar-width:thin}
+.inner{width:min(100%,1100px);margin-inline:auto}
+.kicker{font-size:10px;letter-spacing:.17em;font-weight:750;color:var(--orange);text-transform:uppercase;margin-bottom:20px}
+h1,h2,h3{color:var(--ink);text-wrap:balance}
+h1{font-size:clamp(42px,6.3vw,88px);line-height:.99;letter-spacing:-.055em;font-weight:500}
+h2{font-size:clamp(30px,4vw,54px);line-height:1.04;letter-spacing:-.04em;font-weight:500;margin:0 0 24px}
+h3{font-size:clamp(17px,1.8vw,23px);line-height:1.15;letter-spacing:-.025em;font-weight:600}
+p,li{line-height:1.7}
+.lead{max-width:58ch;font-size:clamp(17px,1.8vw,22px);line-height:1.55;color:#4f5b53}
+.cover{min-height:min(72vh,720px);gap:clamp(28px,6vw,84px);align-items:center}
+.cover-copy{max-width:690px}.cover-art{max-width:440px}
+.cols{gap:clamp(18px,3vw,36px)}
+.note,.quality,.option,.measure,.source-card,.evidence,.phase,.article,.survey-q{border-radius:3px!important;box-shadow:none!important}
+.note,.quality,.option,.measure,.source-card,.evidence,.phase,.article,.survey-q{border:1px solid var(--line);background:rgba(251,250,245,.58)}
+.note{padding:20px 22px}.quality{padding:18px 20px}.option{padding:22px}.measure{padding:20px}
+.number,.q-no,.idx,.article-no{font-family:var(--serif);font-weight:400}
+.table-wrap{border:1px solid var(--line);border-radius:2px;overflow-x:auto}
+table{border-collapse:collapse;width:100%}th,td{padding:12px 14px;border-bottom:1px solid var(--line);text-align:left;line-height:1.5}th{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--soft);font-weight:700}tr:last-child td{border-bottom:0}
+.timeline{gap:0}.phase{border-radius:0!important;border-bottom:0}.phase:last-child{border-bottom:1px solid var(--line)}
+.sources{gap:10px}.source-card{padding:14px 18px}
+.closing-slide{background:var(--paper)}.closing-inner{max-width:1040px}.closing-copy h1{font-size:clamp(50px,8vw,112px);line-height:.91}.closing-team{gap:0}.closing-member{border-bottom:1px solid var(--line);padding:12px 0;display:flex;align-items:center;justify-content:space-between;gap:16px}.closing-member strong{font-size:clamp(16px,1.6vw,21px);font-weight:550}.member-tag{font-size:9px;letter-spacing:.12em;border:1px solid var(--green);padding:5px 8px;border-radius:2px}
+footer{height:62px;padding-inline:clamp(18px,4.5vw,72px);background:rgba(245,242,233,.97);backdrop-filter:blur(10px);border-top:1px solid var(--line)}
+.nav{gap:10px}.nav button{width:36px;height:36px;border:1px solid var(--line);border-radius:50%;background:transparent;color:var(--ink);font-size:17px;transition:background .18s ease,border-color .18s ease,color .18s ease}.nav button:hover{background:var(--green);border-color:var(--green);color:var(--white)}.nav .counter{font-size:10px;letter-spacing:.1em;min-width:48px;text-align:center;font-variant-numeric:tabular-nums}.progress{height:2px;background:var(--green)}
+.toast{border:1px solid var(--line);border-radius:3px;box-shadow:none}
+/* Content should not jump independently of the slide transition. */
+.slide .reveal{opacity:1!important;transform:none!important;transition:none!important}
+.deck{touch-action:pan-y}
+@media(max-width:760px){
+ .topbar{height:54px;padding-inline:18px}.top-right{gap:8px;font-size:9px}
+ .slide{padding:76px 22px 84px}
+ .cover{min-height:0;display:flex;flex-direction:column;align-items:stretch;gap:24px}
+ .cover-art{width:min(100%,360px);align-self:center}
+ .cols{grid-template-columns:1fr!important}
+ .closing-copy h1{font-size:clamp(48px,13vw,76px)}
+ footer{height:58px;padding-inline:16px}.foot-label{display:none}
+}
+@media(prefers-reduced-motion:reduce){.nav button{transition:none}}
 </style>
 </head>
 <body>
@@ -328,8 +372,8 @@ function show(index,force){
 }
 prev.addEventListener('click',()=>show(current-1));next.addEventListener('click',()=>show(current+1));
 document.addEventListener('keydown',e=>{if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();show(current+1)}if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();show(current-1)}if(e.key==='Home')show(0);if(e.key==='End')show(slides.length-1);if(e.key.toLowerCase()==='f')toggleFull();});
-deck.addEventListener('touchstart',e=>{startX=e.changedTouches[0].clientX;startY=e.changedTouches[0].clientY;startOnControl=!!(e.target.closest&&e.target.closest('button,a,.nav'))},{passive:true});
-deck.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-startX,dy=e.changedTouches[0].clientY-startY;const deliberateSwipe=Math.abs(dx)>=145&&Math.abs(dx)>=Math.abs(dy)*2;if(deliberateSwipe&&!startOnControl&&!(e.target.closest&&e.target.closest('button,a,.nav')))show(current+(dx<0?1:-1));startOnControl=false;},{passive:true});
+deck.addEventListener('touchstart',e=>{const t=e.changedTouches[0];startX=t.clientX;startY=t.clientY;startOnControl=!!(e.target.closest&&e.target.closest('button,a,.nav'));},{passive:true});
+deck.addEventListener('touchend',e=>{const t=e.changedTouches[0],dx=t.clientX-startX,dy=t.clientY-startY;const deliberateSwipe=Math.abs(dx)>=105&&Math.abs(dx)>=Math.abs(dy)*1.8;if(deliberateSwipe&&!startOnControl&&!busy){show(current+(dx<0?1:-1));}startOnControl=false;},{passive:true});
 let wheelLock=false;deck.addEventListener('wheel',e=>{if(Math.abs(e.deltaX)>Math.abs(e.deltaY)*1.5&&Math.abs(e.deltaX)>75){e.preventDefault();if(wheelLock)return;wheelLock=true;show(current+(e.deltaX>0?1:-1));setTimeout(()=>wheelLock=false,800);}},{passive:false});
 function toggleFull(){if(!document.fullscreenElement){document.documentElement.requestFullscreen?.().then(()=>notify('To‘liq ekran yoqildi')).catch(()=>notify('Brauzer to‘liq ekranga ruxsat bermadi'))}else document.exitFullscreen?.();}
 full.addEventListener('click',toggleFull);
