@@ -1,6 +1,6 @@
 # Faol fuqaro — O‘zgarishlar tashabbuskori
 
-9-sinf BSB-1 uchun o‘zbek tilidagi taqdimot-sayt. Loyihada 11 sahifa bor. Har bir sahifadagi matn 150 so‘zdan ortiq; dizayn qog‘oz, yashil va to‘q sariq ranglar asosidagi sokin editorial uslubda, ortiqcha neon va dekorativ effektlarsiz. Sahifalar orasida mayin 3D o‘tish bor.
+9-sinf BSB-1 uchun o‘zbek tilidagi taqdimot-sayt. Loyihada 11 sahifa bor. Har bir sahifadagi matn 150 so‘zdan ortiq; dizayn qog‘oz, yashil va to‘q sariq ranglar asosidagi sokin editorial uslubda, ortiqcha neon va dekorativ effektlarsiz. Sahifalar orasida yo‘nalishga qarab o‘zgaradigan, 3D perspektiva va silliq chiqish-kirish animatsiyasi bor. JavaScript faqat sahifa navigatsiyasi, animatsiya, swipe va to‘liq ekran boshqaruvi uchun ishlatiladi; so‘rov formasi va hisob-kitob skripti olib tashlangan.
 
 ## Ishga tushirish
 
@@ -13,9 +13,9 @@ Bu statik sayt. Alohida framework yoki build bosqichi kerak emas. \`index.html\`
 - \`F\` yoki \`⛶\`: to‘liq ekran
 - \`Home\` / \`End\`: birinchi / oxirgi sahifa
 
-## So‘rov natijalarini kiritish
+## Dalillar va so‘rov
 
-“Natijalar va diagramma” sahifasida jami javoblar soni va uchta ko‘rsatkich bo‘yicha haqiqiy javob sonlarini kiriting, so‘ng “Diagrammani yangilash” tugmasini bosing. Diagramma foizni avtomatik hisoblaydi va kiritilgan raqamlarga tayangan ikkita xulosa loyihasini yaratadi. Saytda oldindan tayyor soxta foizlar yo‘q. So‘rovni o‘tkazmagan bo‘lsangiz, natija o‘ylab topmang: avval anonim so‘rovni o‘tkazing va ma’lumotni keyin kiriting. Hozirgi diagramma kiritilgan qiymatlarni joriy brauzer sessiyasida hisoblaydi; natijalarni saqlab qo‘yish uchun ularni alohida qayd eting.
+Taqdimotdagi “Kuzatuv va dalillar” sahifasi interaktiv forma emas. U kuzatuv, anonim so‘rov va natijani tekshirish usullarini tushuntiradi. Jamoa hali haqiqiy ma’lumot yig‘magan bo‘lsa, foiz yoki xulosa o‘ylab topmasligi kerak; haqiqiy natijalar o‘qituvchi bilan kelishilgan jadvalda ko‘rsatiladi.
 
 Topshiriqda og‘zaki himoya uchun 3–5 daqiqa ko‘rsatilgan. Sahifalar kengroq yozma izoh beradi; himoyada ularni boshidan oxirigacha o‘qish o‘rniga muammo, dalil, huquqiy bog‘lanish va tanlangan yechimni qisqa bayon qiling.
 
