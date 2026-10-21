@@ -86,6 +86,26 @@ input{max-width:100%;min-width:0}
 .closing-bottom{margin:36px auto 0;padding-top:15px;border-top:1px solid rgba(255,255,255,.28);width:min(920px,100%);display:flex;justify-content:space-between;gap:15px;color:#cfddd2;font-size:10px;letter-spacing:.12em;text-transform:uppercase}
 @media(max-width:700px){.closing-inner{min-height:calc(100vh - 160px);padding:10px 0}.closing-copy{margin-bottom:27px}.closing-copy h1{font-size:clamp(45px,11vw,70px)}.closing-team{grid-template-columns:1fr 1fr;gap:8px}.closing-member{min-height:72px}.closing-member.author{grid-column:span 2;min-height:86px}.closing-member strong{font-size:16px}.closing-bottom{flex-direction:column;gap:7px;margin-top:25px;text-align:center}}
 @media(prefers-reduced-motion:reduce){.closing-slide *{animation:none!important;transition:none!important}}
+
+/* Robust staged 3D slide movement. The incoming slide starts off-screen,
+   then moves in after a forced layout pass so Safari can animate it reliably. */
+.slide{transition:transform 900ms cubic-bezier(.18,.78,.18,1),opacity 760ms ease,filter 900ms ease!important;transform-style:preserve-3d;backface-visibility:hidden;will-change:transform,opacity}
+.slide.active{visibility:visible;opacity:1;z-index:2;transform:translate3d(0,0,0) rotateY(0deg) scale(1);filter:blur(0)}
+.slide.is-entering{visibility:visible!important;opacity:0;z-index:5!important;pointer-events:none;transition:none!important;filter:blur(2px)}
+.slide.is-entering.from-right{transform:translate3d(25%,0,-240px) rotateY(-18deg) scale(.93)}
+.slide.is-entering.from-left{transform:translate3d(-25%,0,-240px) rotateY(18deg) scale(.93)}
+.slide.is-exiting{visibility:visible!important;opacity:0;z-index:4!important;pointer-events:none;filter:blur(1px)}
+.slide.is-exiting.to-left{transform:translate3d(-17%,0,-130px) rotateY(12deg) scale(.96)}
+.slide.is-exiting.to-right{transform:translate3d(17%,0,-130px) rotateY(-12deg) scale(.96)}
+.slide.is-exiting .reveal{opacity:1;transform:translateY(0)}
+@media(max-width:650px){
+ .slide{transition:transform 820ms cubic-bezier(.18,.78,.18,1),opacity 700ms ease,filter 820ms ease!important}
+ .slide.is-entering.from-right{transform:translate3d(18%,0,-160px) rotateY(-11deg) scale(.96)}
+ .slide.is-entering.from-left{transform:translate3d(-18%,0,-160px) rotateY(11deg) scale(.96)}
+ .slide.is-exiting.to-left{transform:translate3d(-13%,0,-90px) rotateY(8deg) scale(.97)}
+ .slide.is-exiting.to-right{transform:translate3d(13%,0,-90px) rotateY(-8deg) scale(.97)}
+}
+@media(prefers-reduced-motion:reduce){.slide{transition-duration:1ms!important}}
 </style>
 </head>
 <body>
@@ -219,7 +239,52 @@ input{max-width:100%;min-width:0}
 (function(){
 const slides=[...document.querySelectorAll('.slide')],counter=document.getElementById('counter'),progress=document.getElementById('progress'),prev=document.getElementById('prev'),next=document.getElementById('next'),full=document.getElementById('full'),toast=document.getElementById('toast'),deck=document.getElementById('deck');
 let current=0,busy=false,startX=0,startY=0;
-function show(index,force){if(busy&&!force)return;const target=Math.max(0,Math.min(slides.length-1,index));if(target===current)return;busy=true;const old=current,forward=target>old,oldSlide=slides[old],newSlide=slides[target];oldSlide.classList.remove('active','entering-from-right','entering-from-left','leaving-to-left','leaving-to-right');oldSlide.classList.add(forward?'leaving-to-left':'leaving-to-right');newSlide.classList.remove('before','entering-from-right','entering-from-left','leaving-to-left','leaving-to-right');newSlide.classList.add('active',forward?'entering-from-right':'entering-from-left');current=target;counter.textContent=String(current+1).padStart(2,'0')+' / '+String(slides.length).padStart(2,'0');progress.style.width=((current+1)/slides.length*100)+'%';history.replaceState(null,'','#'+(current+1));const finish=()=>{oldSlide.classList.remove('leaving-to-left','leaving-to-right');newSlide.classList.remove('entering-from-right','entering-from-left');busy=false;};setTimeout(finish,980);}
+function show(index,force){
+  if(busy&&!force)return;
+  const target=Math.max(0,Math.min(slides.length-1,index));
+  if(target===current)return;
+  busy=true;
+  const old=current,forward=target>old,oldSlide=slides[old],newSlide=slides[target];
+  const exitDirection=forward?'to-left':'to-right';
+  const enterDirection=forward?'from-right':'from-left';
+
+  oldSlide.classList.remove('is-entering','from-right','from-left','is-exiting','to-left','to-right');
+  newSlide.classList.remove('is-entering','from-right','from-left','is-exiting','to-left','to-right');
+
+  oldSlide.classList.add('is-exiting',exitDirection);
+  oldSlide.classList.remove('active');
+
+  newSlide.classList.remove('active');
+  newSlide.classList.add('is-entering',enterDirection);
+  newSlide.style.visibility='visible';
+  newSlide.style.zIndex='5';
+  void newSlide.getBoundingClientRect();
+  void oldSlide.getBoundingClientRect();
+
+  current=target;
+  counter.textContent=String(current+1).padStart(2,'0')+' / '+String(slides.length).padStart(2,'0');
+  progress.style.width=((current+1)/slides.length*100)+'%';
+  history.replaceState(null,'','#'+(current+1));
+
+  requestAnimationFrame(()=>{
+    requestAnimationFrame(()=>{
+      newSlide.classList.remove('is-entering',enterDirection);
+      newSlide.classList.add('active');
+    });
+  });
+
+  const finish=()=>{
+    oldSlide.classList.remove('is-exiting',exitDirection);
+    oldSlide.style.visibility='';
+    oldSlide.style.zIndex='';
+    newSlide.classList.remove('is-entering','from-right','from-left');
+    newSlide.classList.add('active');
+    newSlide.style.visibility='';
+    newSlide.style.zIndex='';
+    busy=false;
+  };
+  setTimeout(finish,1050);
+}
 prev.addEventListener('click',()=>show(current-1));next.addEventListener('click',()=>show(current+1));
 document.addEventListener('keydown',e=>{if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();show(current+1)}if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();show(current-1)}if(e.key==='Home')show(0);if(e.key==='End')show(slides.length-1);if(e.key.toLowerCase()==='f')toggleFull();});
 deck.addEventListener('touchstart',e=>{startX=e.changedTouches[0].clientX;startY=e.changedTouches[0].clientY},{passive:true});
