@@ -160,6 +160,40 @@ footer{height:62px;padding-inline:clamp(18px,4.5vw,72px);background:rgba(245,242
  footer{height:58px;padding-inline:16px}.foot-label{display:none}
 }
 @media(prefers-reduced-motion:reduce){.nav button{transition:none}}
+
+/* Large-screen / classroom TV presentation tuning */
+@media screen and (min-width: 1000px) and (min-height: 650px) {
+  .inner { width: min(1380px, 100%); }
+  .slide { padding: clamp(82px, 8.2vh, 112px) clamp(5vw, 6.5vw, 112px) 88px; }
+  .topbar { height: 66px; font-size: 12px; }
+  .footer { height: 70px; }
+  .kicker { font-size: 12px; margin-bottom: 22px; }
+  h1 { font-size: clamp(58px, 5.7vw, 104px); }
+  h2 { font-size: clamp(40px, 3.65vw, 66px); max-width: 1100px; }
+  h3 { font-size: clamp(22px, 1.8vw, 30px); }
+  p { font-size: clamp(17px, 1.28vw, 21px); line-height: 1.62; }
+  .lead { font-size: clamp(21px, 1.65vw, 28px); line-height: 1.45; }
+  .fine, .article p, .list li { font-size: 15px; }
+  .quality { padding: 21px 17px; min-height: 178px; }
+  .quality b { font-size: 21px; }
+  .quality span { font-size: 15px; }
+  .data-box { padding: 22px; }
+  .data-box strong { font-size: 25px; }
+  .option { padding: 24px; }
+  .option.chosen { padding: 23px; }
+  .option p, .scores, .phase p, .measure span, .evidence p { font-size: 15px; }
+  .phase h3 { font-size: 23px; }
+  .member { padding: 17px; }
+  .member b { font-size: 18px; }
+  .closing-member strong { font-size: clamp(18px, 1.45vw, 24px); }
+}
+@media screen and (min-width: 1000px) and (max-height: 760px) {
+  .slide { padding-top: 76px; padding-bottom: 78px; }
+  .kicker { margin-bottom: 14px; }
+  h2 { margin-bottom: 16px; }
+  p { line-height: 1.5; margin-bottom: 11px; }
+}
+
 </style>
 </head>
 <body>
