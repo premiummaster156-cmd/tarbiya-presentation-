@@ -160,6 +160,18 @@ footer{height:62px;padding-inline:clamp(18px,4.5vw,72px);background:rgba(245,242
  footer{height:58px;padding-inline:16px}.foot-label{display:none}
 }
 @media(prefers-reduced-motion:reduce){.nav button{transition:none}}
+
+/* Final slide repair and readable projection layout */
+.closing-inner{display:grid;grid-template-columns:1fr;align-content:center;gap:clamp(18px,3vh,34px);min-height:100%;}
+.closing-copy h1{max-width:100%;}
+.closing-team{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;}
+.closing-member{min-width:0;min-height:90px;padding:18px;border:1px solid var(--line,#d4d0c4);background:rgba(255,255,255,.36);display:flex;flex-direction:column;justify-content:center;gap:8px;}
+.closing-member strong{color:var(--ink,#202b27);font-size:clamp(17px,1.8vw,26px);line-height:1.15;}
+.creator-credit{font-size:14px;line-height:1.4;color:var(--muted,#5e6964);}
+.closing-member.author{grid-column:span 3;border:1px solid #c97858;background:linear-gradient(110deg,#dce8dc,#f3e2d1);}
+.closing-bottom{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+@media(max-width:700px){.closing-team{grid-template-columns:repeat(2,minmax(0,1fr));}.closing-member.author{grid-column:span 2;}}
+
 </style>
 </head>
 <body>
@@ -178,7 +190,7 @@ footer{height:62px;padding-inline:clamp(18px,4.5vw,72px);background:rgba(245,242
 <div class="inner">
 <div class="kicker reveal">03 / Dalil to‘plash</div>
 <h2 class="reveal">Muammoni taxmin bilan emas, kuzatuv va so‘rov bilan tekshiramiz.</h2>
-<p class="lead reveal">Tanlangan mavzu — maktab hududida tozalikni saqlash. Avval bu masala qayerda va qachon ko‘rinishini kuzatish, so‘ng o‘quvchilarning fikrini qisqa anonim so‘rov orqali bilish kerak. So‘rovda ism, telefon raqami yoki boshqa shaxsiy ma’lumot so‘ralmaydi. Savollar xolis bo‘lishi kerak: odamni ayblash o‘rniga vaziyat va mumkin bo‘lgan yechimlar haqida so‘raladi.</p>
+<p class="lead reveal">Mavzu — maktab hududida tozalikni saqlash. Avval joy va vaqtni kuzating, so‘ng anonim so‘rov o‘tkazing. Ism yoki telefon raqami so‘ralmaydi; savollar ayblashga emas, vaziyat va yechimlarni aniqlashga qaratiladi.</p>
 <div class="survey-list reveal"><div class="survey-q">Maktab hududida tozalik bilan bog‘liq holatni sezganmisiz?</div><div class="survey-q">Chiqindilar ko‘proq qaysi joylarda qoladi?</div><div class="survey-q">Chiqindi qutilari qulay joylashgan deb hisoblaysizmi?</div><div class="survey-q">Tozalikni saqlashga nimalar to‘sqinlik qilishi mumkin?</div><div class="survey-q">Qaysi yechim foydaliroq bo‘ladi deb o‘ylaysiz?</div><div class="survey-q">Kelishilgan tashabbusda qatnashishga tayyormisiz?</div></div>
 <div class="cols equal" style="margin-top:24px">
 <div class="reveal"><h3>Natijani qanday qayd etamiz?</h3><p>Jamoa nechta kishi javob berganini yozadi. Har bir javob turining soni sanaladi va foiz hisoblanadi: javob soni jami javoblarga bo‘linib, 100 ga ko‘paytiriladi. Kuzatuvda esa sana, joy va ko‘rilgan holat yoziladi. Bu ikki manba bir-birini to‘ldiradi.</p><p class="muted">So‘rovni o‘tkazishdan oldin ustoz bilan kelishing. Ishtirok ixtiyoriy bo‘lsin va natijalar odamlarni ayblash uchun ishlatilmasin.</p></div>
@@ -275,20 +287,19 @@ footer{height:62px;padding-inline:clamp(18px,4.5vw,72px);background:rgba(245,242
 </section>
 <section class="slide closing-slide" data-title="E’tiboringiz uchun rahmat">
 <div class="inner closing-inner">
-<div class="closing-copy reveal"><div class="kicker">Loyiha jamoasi</div><h1>E’tiboringiz<br><em>uchun rahmat!</em></h1></div>
-<div class="closing-team reveal">
-<div class="closing-member author"><span class="member-tag">MUALLIF</span><strong>Qurbonov Asilbek</strong></div>
-<div class="closing-member"><strong>Baxtiyorov Suxrob</strong></div>
-<div class="closing-member"><strong>Achilbayev Javohir</strong></div>
-<div class="closing-member"><strong>Shovkatov Azizbek</strong></div>
-<div class="closing-member"><strong>Põlatov Sardor</strong><div class="closing-team reveal">
-<div class="closing-member author"><span class="member-tag">MUALLIF</span><strong>Qurbonov Asilbek</strong></div>
-<div class="closing-member"><strong>Baxtiyorov Suxrob</strong></div>
-<div class="closing-member"><strong>Achilbayev Javohir</strong></div>
-<div class="closing-member"><strong>Shovkatov Azizbek</strong></div>
-<div class="closing-member"><strong>Allaberdiyev Sobirjon</strong></div>
-</div>
-<div class="closing-bottom"><span>9-sinf · BSB-1 loyiha ishi</span><span>Faol fuqaro — o‘zgarishlar tashabbuskori</span></div>
+  <div class="closing-copy reveal">
+    <div class="kicker">Loyiha jamoasi</div>
+    <h1>E’tiboringiz<br><em>uchun rahmat!</em></h1>
+  </div>
+  <div class="closing-team reveal">
+    <div class="closing-member author"><strong>Qurbonov Asilbek</strong><span class="creator-credit">Bu sahifa Qurbonov Asilbek tomonidan yaratildi.</span></div>
+    <div class="closing-member"><strong>Baxtiyorov Suxrob</strong></div>
+    <div class="closing-member"><strong>Achilbayev Javohir</strong></div>
+    <div class="closing-member"><strong>Shovkatov Azizbek</strong></div>
+    <div class="closing-member"><strong>Põlatov Sardor</strong></div>
+    <div class="closing-member"><strong>Allaberdiyev Sobirjon</strong></div>
+  </div>
+  <div class="closing-bottom"><span>9-sinf · BSB-1 loyiha ishi</span><span>Faol fuqaro — o‘zgarishlar tashabbuskori</span></div>
 </div>
 </section>
 </main>
