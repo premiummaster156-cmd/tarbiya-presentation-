@@ -341,95 +341,65 @@ footer{height:62px;padding-inline:clamp(18px,4.5vw,72px);background:rgba(245,242
 <div class="toast" id="toast" role="status">To‘liq ekran rejimi</div>
 <script>
 (function(){
-const slides=[...document.querySelectorAll('.slide')],counter=document.getElementById('counter'),progress=document.getElementById('progress'),prev=document.getElementById('prev'),next=document.getElementById('next'),full=document.getElementById('full'),toast=document.getElementById('toast'),deck=document.getElementById('deck');
-let current=0,busy=false,startX=0,startY=0,startOnControl=false;
-function show(index,force){
-  if(busy&&!force)return;
-  const target=Math.max(0,Math.min(slides.length-1,index));
-  if(target===current)return;
-  busy=true;
-  const old=current,forward=target>old,oldSlide=slides[old],newSlide=slides[target];
-  const isSmall=window.matchMedia('(max-width:650px)').matches;
-  const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const duration=reduced?420:(isSmall?620:680);
-  const exitDuration=reduced?340:(isSmall?440:480);
-  const offset=isSmall?'12%':'14%';
-  const depth=isSmall?'-45px':'-70px';
-  const tilt=isSmall?5:6;
+  const slides=Array.from(document.querySelectorAll('.slide'));
+  const counter=document.getElementById('counter');
+  const progress=document.getElementById('progress');
+  const prev=document.getElementById('prev');
+  const next=document.getElementById('next');
+  const full=document.getElementById('full');
+  const toast=document.getElementById('toast');
+  const deck=document.getElementById('deck');
+  if(!slides.length||!prev||!next||!counter||!progress)return;
 
-  /* Keep both pages rendered during the move. Web Animations starts from
-     explicit keyframes rather than relying on a class-change timing race. */
-  newSlide.classList.add('active');
-  newSlide.style.visibility='visible';
-  newSlide.style.zIndex='5';
-  oldSlide.style.visibility='visible';
-  oldSlide.style.zIndex='4';
+  let current=0,startX=0,startY=0,startOnControl=false,wheelLock=false;
+  let transitionTimer=null;
 
-  const inFrames=forward?[
-    {transform:'translate3d('+offset+',0,'+depth+') rotateY(-'+tilt+'deg) scale(.985)',opacity:0,offset:0},
-    {transform:'translate3d(0,0,0) rotateY(0deg) scale(1)',opacity:1,offset:1}
-  ]:[
-    {transform:'translate3d(-'+offset+',0,'+depth+') rotateY('+tilt+'deg) scale(.985)',opacity:0,offset:0},
-    {transform:'translate3d(0,0,0) rotateY(0deg) scale(1)',opacity:1,offset:1}
-  ];
-  const outFrames=forward?[
-    {transform:'translate3d(0,0,0) rotateY(0deg) scale(1)',opacity:1,offset:0},
-    {transform:'translate3d(-5%,0,-20px) rotateY(2deg) scale(.995)',opacity:0,offset:1}
-  ]:[
-    {transform:'translate3d(0,0,0) rotateY(0deg) scale(1)',opacity:1,offset:0},
-    {transform:'translate3d(5%,0,-20px) rotateY(-2deg) scale(.995)',opacity:0,offset:1}
-  ];
-
-  let incoming=null,outgoing=null;
-  if(typeof newSlide.animate==='function'){
-    incoming=newSlide.animate(inFrames,{duration,easing:'cubic-bezier(.22,.61,.36,1)',fill:'both'});
-    outgoing=oldSlide.animate(outFrames,{duration:exitDuration,easing:'cubic-bezier(.4,0,.7,.2)',fill:'both'});
-  }else{
-    /* Fallback for browsers without Web Animations support. */
-    newSlide.style.transition='none';
-    newSlide.style.opacity='0';
-    newSlide.style.transform=inFrames[0].transform;
-    void newSlide.getBoundingClientRect();
-    newSlide.style.transition='transform 760ms cubic-bezier(.22,.72,.2,1),opacity 760ms ease';
-    requestAnimationFrame(()=>{newSlide.style.opacity='1';newSlide.style.transform='translate3d(0,0,0) rotateY(0deg) scale(1)';});
-    oldSlide.style.transition='transform 520ms ease,opacity 520ms ease';
-    requestAnimationFrame(()=>{oldSlide.style.opacity='0';oldSlide.style.transform=outFrames[1].transform;});
+  function show(index){
+    const target=Math.max(0,Math.min(slides.length-1,index));
+    if(target===current)return;
+    const old=slides[current],incoming=slides[target];
+    const forward=target>current;
+    if(transitionTimer!==null){clearTimeout(transitionTimer);transitionTimer=null;}
+    slides.forEach(s=>{s.classList.remove('active');s.style.visibility='';s.style.zIndex='';s.style.opacity='';s.style.transform='';});
+    incoming.classList.add('active');
+    incoming.style.visibility='visible';
+    incoming.style.zIndex='3';
+    incoming.style.opacity='1';
+    incoming.style.transform='translate3d(0,0,0) rotateY(0deg)';
+    old.style.visibility='visible';
+    old.style.zIndex='2';
+    old.style.opacity='0';
+    old.style.transform=forward?'translate3d(-3%,0,-20px) rotateY(2deg)':'translate3d(3%,0,-20px) rotateY(-2deg)';
+    current=target;
+    counter.textContent=String(current+1).padStart(2,'0')+' / '+String(slides.length).padStart(2,'0');
+    progress.style.width=((current+1)/slides.length*100)+'%';
+    try{history.replaceState(null,'','#'+(current+1));}catch(e){}
+    transitionTimer=setTimeout(()=>{
+      old.style.visibility='hidden';old.style.zIndex='';old.style.opacity='';old.style.transform='';
+      incoming.style.visibility='';incoming.style.zIndex='';incoming.style.opacity='';incoming.style.transform='';
+      transitionTimer=null;
+    },500);
   }
 
-  current=target;
-  counter.textContent=String(current+1).padStart(2,'0')+' / '+String(slides.length).padStart(2,'0');
-  progress.style.width=((current+1)/slides.length*100)+'%';
-  history.replaceState(null,'','#'+(current+1));
-
-  setTimeout(()=>{
-    oldSlide.classList.remove('active');
-    oldSlide.style.visibility='';
-    oldSlide.style.zIndex='';
-    oldSlide.style.opacity='';
-    oldSlide.style.transform='';
-    oldSlide.style.transition='';
-    if(outgoing)outgoing.cancel();
-
-    newSlide.classList.add('active');
-    newSlide.style.visibility='';
-    newSlide.style.zIndex='';
-    newSlide.style.opacity='';
-    newSlide.style.transform='';
-    newSlide.style.transition='';
-    if(incoming)incoming.cancel();
-    busy=false;
-  },duration+40);
-}
-prev.addEventListener('click',()=>show(current-1));next.addEventListener('click',()=>show(current+1));
-document.addEventListener('keydown',e=>{if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();show(current+1)}if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();show(current-1)}if(e.key==='Home')show(0);if(e.key==='End')show(slides.length-1);if(e.key.toLowerCase()==='f')toggleFull();});
-deck.addEventListener('touchstart',e=>{const t=e.changedTouches[0];startX=t.clientX;startY=t.clientY;startOnControl=!!(e.target.closest&&e.target.closest('button,a,.nav'));},{passive:true});
-deck.addEventListener('touchend',e=>{const t=e.changedTouches[0],dx=t.clientX-startX,dy=t.clientY-startY;const deliberateSwipe=Math.abs(dx)>=105&&Math.abs(dx)>=Math.abs(dy)*1.8;if(deliberateSwipe&&!startOnControl&&!busy){show(current+(dx<0?1:-1));}startOnControl=false;},{passive:true});
-let wheelLock=false;deck.addEventListener('wheel',e=>{if(Math.abs(e.deltaX)>Math.abs(e.deltaY)*1.5&&Math.abs(e.deltaX)>75){e.preventDefault();if(wheelLock)return;wheelLock=true;show(current+(e.deltaX>0?1:-1));setTimeout(()=>wheelLock=false,800);}},{passive:false});
-function toggleFull(){if(!document.fullscreenElement){document.documentElement.requestFullscreen?.().then(()=>notify('To‘liq ekran yoqildi')).catch(()=>notify('Brauzer to‘liq ekranga ruxsat bermadi'))}else document.exitFullscreen?.();}
-full.addEventListener('click',toggleFull);
-function notify(text){toast.textContent=text;toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),1700)}
-const hash=Number(location.hash.slice(1));if(hash>1&&hash<=slides.length){slides[0].classList.remove('active');current=hash-1;slides[current].classList.add('active');counter.textContent=String(hash).padStart(2,'0')+' / '+String(slides.length).padStart(2,'0');progress.style.width=(hash/slides.length*100)+'%';}
-
+  prev.addEventListener('click',e=>{e.preventDefault();show(current-1);});
+  next.addEventListener('click',e=>{e.preventDefault();show(current+1);});
+  document.addEventListener('keydown',e=>{
+    if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();show(current+1);}
+    else if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();show(current-1);}
+    else if(e.key==='Home')show(0);
+    else if(e.key==='End')show(slides.length-1);
+    else if(e.key.toLowerCase()==='f')toggleFull();
+  });
+  if(deck){
+    deck.addEventListener('touchstart',e=>{const t=e.changedTouches[0];startX=t.clientX;startY=t.clientY;startOnControl=!!(e.target.closest&&e.target.closest('button,a,.nav'));},{passive:true});
+    deck.addEventListener('touchend',e=>{const t=e.changedTouches[0],dx=t.clientX-startX,dy=t.clientY-startY;if(Math.abs(dx)>=75&&Math.abs(dx)>Math.abs(dy)*1.5&&!startOnControl)show(current+(dx<0?1:-1));startOnControl=false;},{passive:true});
+    deck.addEventListener('wheel',e=>{if(Math.abs(e.deltaX)>Math.abs(e.deltaY)*1.5&&Math.abs(e.deltaX)>75){e.preventDefault();if(wheelLock)return;wheelLock=true;show(current+(e.deltaX>0?1:-1));setTimeout(()=>wheelLock=false,650);}},{passive:false});
+  }
+  function notify(message){if(!toast)return;toast.textContent=message;toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),1700);}
+  function toggleFull(){if(!document.fullscreenElement){document.documentElement.requestFullscreen?.().then(()=>notify('To‘liq ekran yoqildi')).catch(()=>notify('Brauzer to‘liq ekranga ruxsat bermadi'));}else document.exitFullscreen?.();}
+  if(full)full.addEventListener('click',toggleFull);
+  const hash=Number(location.hash.slice(1));
+  if(hash>1&&hash<=slides.length){slides.forEach(s=>s.classList.remove('active'));current=hash-1;slides[current].classList.add('active');counter.textContent=String(hash).padStart(2,'0')+' / '+String(slides.length).padStart(2,'0');progress.style.width=(hash/slides.length*100)+'%';}
 })();
 </script>
 </body>
