@@ -362,6 +362,63 @@ footer{height:62px;padding-inline:clamp(18px,4.5vw,72px);background:rgba(245,242
   .creator-card{transition:none!important}
 }
 
+
+/* Quiet editorial closing slide: remove glossy template styling */
+.creator-card{
+  position:relative;isolation:isolate;overflow:hidden;
+  width:min(680px,100%);margin:0 auto 24px;padding:24px 30px;
+  color:#24312b;text-align:left;border:1px solid #d8d2c4;border-left:5px solid #315e4d;
+  border-radius:3px;background:#e9e5da;
+  box-shadow:0 7px 0 rgba(49,94,77,.08);
+  transform-style:preserve-3d;will-change:transform;
+  animation:creditLift 8s ease-in-out infinite;
+}
+.creator-card:before,.creator-card:after{content:none!important}
+.creator-card .creator-intro,.creator-card .creator-outro{
+  margin:0;font-family:inherit;font-size:clamp(15px,1.25vw,18px);
+  line-height:1.5;letter-spacing:.025em;color:#59655d
+}
+.creator-card h2{
+  margin:4px 0 8px;font-family:var(--serif);
+  font-size:clamp(28px,3vw,42px);line-height:1.15;font-weight:600;
+  letter-spacing:-.025em;color:#20382e;text-shadow:none;transform:translateZ(10px)
+}
+.creator-card .creator-outro{padding-top:10px;border-top:1px solid #c9c3b5}
+@keyframes creditLift{
+  0%,100%{transform:perspective(1200px) translateY(0) rotateX(0deg)}
+  50%{transform:perspective(1200px) translateY(-3px) rotateX(.35deg)}
+}
+.closing-team{
+  display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:0!important;border-top:1px solid #cfc9bb;border-left:1px solid #cfc9bb;
+  background:transparent!important
+}
+.closing-member{
+  min-width:0;min-height:65px;display:flex;align-items:center;justify-content:flex-start!important;
+  text-align:left!important;padding:14px 17px!important;border:0!important;
+  border-right:1px solid #cfc9bb!important;border-bottom:1px solid #cfc9bb!important;
+  border-radius:0!important;background:rgba(255,255,255,.20)!important;
+  box-shadow:none!important
+}
+.closing-member strong{
+  font-family:var(--serif);font-size:clamp(15px,1.45vw,21px)!important;
+  line-height:1.25;font-weight:600;color:#28342e!important
+}
+@media(min-width:1000px) and (min-height:650px){
+  .closing-inner{max-width:1260px!important}
+  .creator-card{width:min(760px,100%);padding:26px 34px}
+  .closing-team{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  .closing-member{min-height:72px}
+}
+@media(max-width:700px){
+  .creator-card{padding:19px 20px;margin-bottom:18px}
+  .creator-card h2{font-size:clamp(26px,7vw,34px)}
+  .closing-team{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .closing-member{min-height:60px;padding:12px 10px!important}
+  .closing-member strong{font-size:clamp(14px,4vw,18px)!important}
+}
+@media(prefers-reduced-motion:reduce){.creator-card{animation:none!important}}
+
 </style>
 </head>
 <body>
@@ -493,10 +550,9 @@ footer{height:62px;padding-inline:clamp(18px,4.5vw,72px);background:rgba(245,242
 <div class="closing-copy reveal"><div class="kicker">Loyiha jamoasi</div><h1>E’tiboringiz<br><em>uchun rahmat!</em></h1></div>
 
 <div class="creator-card reveal" aria-label="Bu sahifa Qurbonov Asilbek tomonidan yaratildi">
-  <div class="creator-card-top"><span class="creator-orbit" aria-hidden="true">✦</span><span class="creator-card-label">SAHIFA YARATUVCHISI</span><span class="creator-card-code">01 / CREATOR</span></div>
-  <p>Bu sahifa</p>
+  <p class="creator-intro">Bu sahifa</p>
   <h2>Qurbonov Asilbek</h2>
-  <div class="creator-card-bottom"><span>tomonidan yaratildi</span><span class="creator-sign" aria-hidden="true">↗</span></div>
+  <p class="creator-outro">tomonidan yaratildi</p>
 </div>
 <div class="closing-team reveal">
 <div class="closing-member"><strong>Qurbonov Asilbek</strong></div>
