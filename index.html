@@ -499,6 +499,34 @@ footer{height:62px;padding-inline:clamp(18px,4.5vw,72px);background:rgba(245,242
  .criteria-strip{justify-content:flex-start}
 }
 
+
+/* Individual plans and the actual-result table stay legible on narrow screens. */
+.role-card small{display:block;margin:6px 0;color:var(--green);font-size:11px;font-weight:700}
+.individual-plan-table{margin:12px 0 16px}
+.individual-plan-table table{min-width:700px}
+.individual-plan-table th,.individual-plan-table td{font-size:12px;padding:9px 10px}
+@media(max-width:760px){
+ .individual-plan-table{overflow:visible!important}
+ .individual-plan-table table,.individual-plan-table tbody,.individual-plan-table tr,.individual-plan-table td{display:block!important;width:100%!important;min-width:0!important}
+ .individual-plan-table thead{display:none!important}
+ .individual-plan-table tr{padding:10px 12px;border-bottom:1px solid var(--line);background:var(--white)}
+ .individual-plan-table tr:last-child{border-bottom:0}
+ .individual-plan-table td{padding:4px 0!important;border:0!important;font-size:13px!important}
+ .individual-plan-table td:first-child{font-weight:700;color:var(--ink)}
+ .individual-plan-table td:nth-child(2):before{content:"Vazifa: ";font-weight:700;color:var(--green)}
+ .individual-plan-table td:nth-child(3):before{content:"Muddat: ";font-weight:700;color:var(--green)}
+ .individual-plan-table td:nth-child(4):before{content:"Dalil: ";font-weight:700;color:var(--green)}
+ .results-table td+td:before{content:none!important}
+ .results-table td:nth-child(2):before{content:"Natija: ";font-weight:700;color:var(--green)}
+ .results-table td:nth-child(3):before{content:"Foiz / izoh: ";font-weight:700;color:var(--green)}
+}
+@media screen and (min-width:1000px) and (min-height:650px){
+ .individual-plan-table table{min-width:0}
+ .individual-plan-table th,.individual-plan-table td{font-size:13px;padding:8px 10px}
+}
+/* First counter/progress state matches the 13 actual slides. */
+#progress{width:7.6923%}
+
 </style>
 </head>
 <body>
@@ -576,15 +604,28 @@ footer{height:62px;padding-inline:clamp(18px,4.5vw,72px);background:rgba(245,242
   </div>
   <h3 class="section-subhead reveal">Jamoaviy rollar</h3>
   <div class="role-grid">
-    <div class="role-card reveal"><b>Koordinator</b><span>Vazifalar va muddatlarni tashkil qiladi.</span></div>
-    <div class="role-card reveal"><b>Tadqiqotchi</b><span>Darslik va ishonchli manbalarni tekshiradi.</span></div>
-    <div class="role-card reveal"><b>So‘rov koordinatori</b><span>5–7 savolni tayyorlaydi va so‘rovni tashkil qiladi.</span></div>
-    <div class="role-card reveal"><b>Analitik</b><span>Javoblarni hisoblaydi, jadval yoki diagramma tayyorlaydi.</span></div>
-    <div class="role-card reveal"><b>Tashabbus yaratuvchi</b><span>Yechim va yakuniy mahsulotni ishlab chiqadi.</span></div>
-    <div class="role-card reveal"><b>Taqdimotchi</b><span>Natijani himoya qilishni tashkil etadi.</span></div>
+    <div class="role-card reveal"><b>Koordinator</b><small>Mas’ul a’zo: [ism]</small><span>Vazifalar va muddatlarni tashkil qiladi.</span></div>
+    <div class="role-card reveal"><b>Tadqiqotchi</b><small>Mas’ul a’zo: [ism]</small><span>Darslik va ishonchli manbalarni tekshiradi.</span></div>
+    <div class="role-card reveal"><b>So‘rov koordinatori</b><small>Mas’ul a’zo: [ism]</small><span>5–7 savolni tayyorlaydi va so‘rovni tashkil qiladi.</span></div>
+    <div class="role-card reveal"><b>Analitik</b><small>Mas’ul a’zo: [ism]</small><span>Javoblarni hisoblaydi, jadval yoki diagramma tayyorlaydi.</span></div>
+    <div class="role-card reveal"><b>Tashabbus yaratuvchi</b><small>Mas’ul a’zo: [ism]</small><span>Yechim va yakuniy mahsulotni ishlab chiqadi.</span></div>
+    <div class="role-card reveal"><b>Taqdimotchi</b><small>Mas’ul a’zo: [ism]</small><span>Natijani himoya qilishni tashkil etadi.</span></div>
   </div>
   <div class="note reveal">Individual reja: har bir a’zo o‘z vazifasi, bajarish muddatini, kutiladigan natijani va uni isbotlovchi dalilni yozadi. Rol boshqa bosqichlarda shaxsiy vazifa bajarish majburiyatini bekor qilmaydi.</div>
-  <div class="individual-plan reveal"><b>Shaxsiy ish rejasi andozasi</b><span>Vazifam: ____________________</span><span>Muddat: ____________________</span><span>Natija yoki dalil: ____________________</span></div>
+  <h3 class="section-subhead reveal">Har bir a’zoning individual rejasi</h3>
+  <div class="table-wrap individual-plan-table reveal">
+    <table>
+      <thead><tr><th>A’zo</th><th>Shaxsiy vazifa</th><th>Muddat</th><th>Natija / dalil</th></tr></thead>
+      <tbody>
+        <tr><td>Qurbonov Asilbek</td><td>[vazifani kiriting]</td><td>[sana]</td><td>[dalil]</td></tr>
+        <tr><td>Baxtiyorov Suxrob</td><td>[vazifani kiriting]</td><td>[sana]</td><td>[dalil]</td></tr>
+        <tr><td>Achilbayev Javohir</td><td>[vazifani kiriting]</td><td>[sana]</td><td>[dalil]</td></tr>
+        <tr><td>Shovkatov Azizbek</td><td>[vazifani kiriting]</td><td>[sana]</td><td>[dalil]</td></tr>
+        <tr><td>Põlatov Sardor</td><td>[vazifani kiriting]</td><td>[sana]</td><td>[dalil]</td></tr>
+        <tr><td>Allaberdiyev Sobirjon</td><td>[vazifani kiriting]</td><td>[sana]</td><td>[dalil]</td></tr>
+      </tbody>
+    </table>
+  </div>
 </div>
 </section>
 <section class="slide" data-title="So‘rov va dalillar">
